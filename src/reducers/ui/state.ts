@@ -19,7 +19,7 @@ export class UIState implements UIStateData {
 
 	constructor(...args: UIStateData[]) {
 
-		// TS doesn't permit Object.assign to populate readonly fields.
+		// TS doesn't permit Object.assign to populate readonly fields. Prepopulating with defaults.
 		this.isRandom = false;
 		this.showStory = false;
 		this.showEMail = false;

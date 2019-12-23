@@ -1,8 +1,10 @@
 import { Dispatch } from 'redux';
+import { ThunkAction } from 'redux-thunk';
 
 import { sleep } from '../../common';
 
-import { BaseAction, ReactlibThunkAction } from '../types';
+import { State } from '../index';
+import { BaseAction } from '../types';
 import { initEntries } from '../entries/actions';
 
 import { ConfigStateJSON, StoryConfigData, WordConfigData } from './types';
@@ -72,6 +74,8 @@ class ResponseError extends Error {
 /*
  *	Asynchronous actions. These are the only actions available outside the module.
  */
+
+type ReactlibThunkAction<ReturnType = void> = ThunkAction<ReturnType, State, null, BaseAction>;
 
 /**
  *	Load the config file, then load the word and story files identified by the

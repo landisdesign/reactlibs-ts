@@ -5,8 +5,7 @@ export function wordsReducer(state: WordState = new WordState(), action: WordsAc
 	switch (action.type) {
 		case WORDS_LOAD: {
 			const loadWordsAction = action as LoadWordsAction;
-			const wordList = loadWordsAction.payload;
-			return new WordState(wordList);
+			return new WordState(loadWordsAction.payload);
 		}
 		default:
 			return state;

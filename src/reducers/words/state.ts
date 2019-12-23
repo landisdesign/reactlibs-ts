@@ -22,7 +22,7 @@ interface ConfigAccumulator {
 }
 
 export class WordState {
-	readonly wordMap: WordMap;
+	private readonly wordMap: WordMap;
 
 	constructor(wordList?: WordConfigData[]) {
 		if (!wordList) {
@@ -56,7 +56,7 @@ export class WordState {
 		this.wordMap = wordMap;
 	}
 
-	word(id: string): Word {
+	find(id: string): Word {
 		return this.wordMap[id];
 	}
 }

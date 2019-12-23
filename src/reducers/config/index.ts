@@ -1,7 +1,7 @@
 import { ConfigState } from './state';
 import {
 	INIT_CONFIG, LOAD_STORIES, LOAD_WORD_LIST, RECONCILE_CONFIG, START_APPLICATION,
-	ConfigAction, InitConfigAction, LoadStoriesAction, LoadWordListAction
+	InitConfigAction, LoadStoriesAction, LoadWordListAction, ConfigAction
 } from './actions';
 
 

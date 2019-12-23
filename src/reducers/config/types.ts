@@ -5,16 +5,16 @@
  *	complaining that they weren't exported even when they are.
  */
 
-interface WordConfigBaseData {
+interface WordBaseConfigData {
 	readonly id: string;
 	readonly title: string;
 }
 
-export interface WordListConfigData extends WordConfigBaseData {
+export interface WordListConfigData extends WordBaseConfigData {
 	readonly words: string[];
 }
 
-export interface WordRefConfigData extends WordConfigBaseData {
+export interface WordRefConfigData extends WordBaseConfigData {
 	readonly ref: string;
 }
 

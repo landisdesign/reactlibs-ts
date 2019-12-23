@@ -31,7 +31,7 @@ export class StoryState {
 		return this.stories[index];
 	}
 
-	find(id: string): number {
+	indexOf(id: string): number {
 		return this.indices[id];
 	}
 }

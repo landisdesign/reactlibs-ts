@@ -1,3 +1,5 @@
+import { StoryConfigData } from '../config/types';
+
 import { InitEntriesAction, SetEntryAction, SetEntriesAction, ClearEntriesAction } from './types';
 
 export const INIT_ENTRIES ='INIT_ENTRIES';
@@ -5,7 +7,7 @@ export const SET_ENTRY = 'SET_ENTRY';
 export const SET_ENTRIES = 'SET_ENTRIES';
 export const CLEAR_ENTRIES = 'CLEAR_ENTRIES';
 
-export const initEntries = (stories: any[]): InitEntriesAction => ({
+export const initEntries = (stories: StoryConfigData[]): InitEntriesAction => ({
 	type: INIT_ENTRIES,
 	payload: stories
 });

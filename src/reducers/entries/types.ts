@@ -5,10 +5,12 @@
  *	complaining that they weren't exported even when they are.
  */
 
+import { StoryConfigData } from '../config/types';
+
 import { BaseAction } from '../types';
 
 export interface InitEntriesAction extends BaseAction {
-	payload: any[];
+	payload: StoryConfigData[];
 }
 
 export interface SetEntryAction extends BaseAction {

@@ -9,10 +9,7 @@ export function uiReducer(state: UIState = new UIState(), action: UIAction): UIS
 		case SET_STORY_INDEX:
 		case SET_WILL_CLEAR:
 		case SET_OUTPUT:
-			{
-				const data = {...action.payload};
-				return new UIState(state, data);
-			}
+			return new UIState(state, action.payload);
 		default:
 			return state;
 	}

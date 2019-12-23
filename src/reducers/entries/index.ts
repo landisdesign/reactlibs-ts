@@ -1,7 +1,7 @@
 import { INIT_ENTRIES, SET_ENTRY, SET_ENTRIES, CLEAR_ENTRIES } from './actions';
-import { EntriesAction, InitEntriesAction, SetEntryAction, SetEntriesAction, ClearEntriesAction } from './types';
+import { InitEntriesAction, SetEntryAction, SetEntriesAction, ClearEntriesAction, EntriesAction } from './types';
 
-export type EntryState = string[][];
+type EntryState = string[][];
 
 export function entriesReducer(state: EntryState = [], action: EntriesAction): EntryState {
 	switch (action.type) {

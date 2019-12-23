@@ -117,15 +117,12 @@ export class ConfigState implements ConfigStateData, Cloneable<ConfigState> {
 	}
 
 	loadStoryData(source: StoryConfigData[]): ConfigState {
-		const data: ConfigStateData = {...this};
-		data.storySource = new StoryConfig(source);
+		const data = {...this, storySource: new StoryConfig(source)};
 		return new ConfigState(data);
 	}
 
 	loadLoadingState(loading: boolean, loaded: boolean): ConfigState {
-		const data: ConfigStateData = {...this};
-		data.loading = loading;
-		data.loaded = loaded;
+		const data = {...this, loading, loaded};
 		return new ConfigState(data);
 	}
 
