@@ -1,7 +1,8 @@
-/**
- *	These are split out from actions.ts because apparently combining TS-only
- *	values with JS values causes the TS-only elements to be ellided during
- *	transpilation and webpack complains that they are missing.
+/*
+ *	These types have been split out to avoid elision by TypeScript. If these
+ *	were included in a module that contains concrete types, TypeScript would
+ *	strip them before webpack can reconcile them. This results in webpack
+ *	complaining that they weren't exported even when they are.
  */
 
 import { BaseAction } from '../types';
