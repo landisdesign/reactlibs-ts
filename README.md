@@ -30,8 +30,10 @@ I'm currently opting for defining everything individually. It feels arduous,
 but it's also helping me get a feel for creating types and working with them.
 It also helps me make sure that I don't make a small change that cascades
 through the entire codebase simply by changing a function return without
-having to change the return type definition. As I continue, I may undo this and
-try it again with less handwritten definition.
+having to change the return type definition. Honestly, letting TypeScript
+decide these types instread of me consciously defining them feels fast but
+not deliberate. As I continue, I may undo this and try it again with less
+handwritten definition.
 
 I'm choosing to type the state pretty heavily, to allow it to take care of
 itself. By creating a `Cloneable<T>` interface, the top level of state doesn't
