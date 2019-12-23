@@ -1,44 +1,55 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# reactlibs-ts
 
-## Available Scripts
+This is a refactor of my original [`reactlibs`](https://github.com/landisdesign/reactlibs)
+project, using TypeScript and classes for my React components. I haven't
+explored TypeScript much, but it is useful for larger projects, so this is a
+playground. Also, while functional components and hooks are much simpler for
+me, I can imagine large codebases being primarily class-based, so it will be
+valuable for me to get some practice with that.
 
-In the project directory, you can run:
+## First impressions: TypeScript
 
-### `npm start`
+For the most part TypeScript has been fun. My Java background helps me adopt
+it fairly quickly. My main challenge is, of course, not knowing what I don't
+know. It took me a while to understand how to merge data together and retain
+type safety, and I'm sure there are many other things I've been missing.
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+One thing I've noticed is how many classes and interfaces proliferate once
+data types need to be clarified. Things that used to be one-size-fits-all
+end up becoming a type per variant. In some cases I've been able to use
+generics, while in other cases I've used interfaces built of entirely
+optional parameters, and in still others I've been able to use type unions.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+### Redux
 
-### `npm test`
+I've seen different examples with varying levels of type definition, from using
+`ReturnType<typeof x>` and letting TypeScript work it out on the fly, to
+defining everything individually.
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+I'm currently opting for defining everything individually. It feels arduous,
+but it's also helping me get a feel for creating types and working with them.
+It also helps me make sure that I don't make a small change that cascades
+through the entire codebase simply by changing a function return without
+having to change the return type definition. As I continue, I may undo this and
+try it again with less handwritten definition.
 
-### `npm run build`
+I'm choosing to type the state pretty heavily, to allow it to take care of
+itself. By creating a `Cloneable<T>` interface, the top level of state doesn't
+need to know how to duplicate itself. It just needs to tell its members to
+clone themselves.
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Similarly I can enforce the immutability of array and object fields by making
+them private and providing accessor methods, in addition to making the fields
+themselves readonly.
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+Any calculation to create object state is done in the constructor. This lets
+me keep the reducers much smaller, simply retrieving payloads and delivering
+them to the classes to return new state objects with the changes reflected in
+them.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+I honestly don't know whether or not this is an anti-pattern. I'd look towards
+the code base I'm assigned to for direction.
 
-### `npm run eject`
+---
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+I will update this README as I continue.
