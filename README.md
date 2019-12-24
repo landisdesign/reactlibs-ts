@@ -52,6 +52,13 @@ them.
 I honestly don't know whether or not this is an anti-pattern. I'd look towards
 the code base I'm assigned to for direction.
 
+## First Impressions: Classes vs Functional Components
+
+I converted all of my components to classes. This is obviously extreme, but I
+wanted the practice and the capacity to make class-based components without
+thinking about it. Repetition trains the fingers! In real life there would be a
+balance, as well as following conventions in the code base I work in.
+
 ---
 
 I will update this README as I continue.

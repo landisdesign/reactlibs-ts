@@ -3,7 +3,7 @@ import { ThunkAction } from 'redux-thunk';
 
 import { sleep } from '../../common';
 
-import { State } from '../index';
+import { ReduxState } from '../index';
 import { BaseAction } from '../types';
 import { initEntries } from '../entries/actions';
 
@@ -75,7 +75,7 @@ class ResponseError extends Error {
  *	Asynchronous actions. These are the only actions available outside the module.
  */
 
-type ReactlibThunkAction<ReturnType = void> = ThunkAction<ReturnType, State, null, BaseAction>;
+type ReactlibThunkAction<ReturnType = void> = ThunkAction<ReturnType, ReduxState, null, BaseAction>;
 
 /**
  *	Load the config file, then load the word and story files identified by the

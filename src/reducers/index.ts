@@ -16,4 +16,4 @@ const reducers = {
 
 export const reducer = combineReducers(reducers);
 
-export type State = ReturnType<typeof reducer>;
+export type ReduxState = ReturnType<typeof reducer>;

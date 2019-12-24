@@ -2,6 +2,10 @@ interface EqualityFunction<T> {
 	(a: T, b: T): boolean;
 }
 
+interface KeysEqualityFuncton<T> extends EqualityFunction<T> {
+	KeysType: keyof T;
+}
+
 interface IteratorFunction<T> {
 	(a: T): void;
 }
@@ -46,7 +50,7 @@ const maskObject = (object: any, mask: any): any => Object.keys(mask).reduce((ac
 
 const noop = ():void =>{};
 
-const objectEquals = (a: any, b: any) => {
+function objectEquals(a: any, b: any) {
 	if (!referenceEquals(a, b)) {
 		return false;
 	}

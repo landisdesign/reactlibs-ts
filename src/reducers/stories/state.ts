@@ -1,3 +1,5 @@
+import { StringNumberMap } from '../../types';
+
 import { StoryConfigData } from '../config/types';
 
 export class Story implements StoryConfigData {
@@ -14,8 +16,8 @@ export class Story implements StoryConfigData {
 	}
 }
 
-class StringNumberMap {
-	[index: string]: number;
+interface MapFunction<T> {
+	(x: T, i?: number, a?: T[], t?: any): any;
 }
 
 export class StoryState {
@@ -33,5 +35,9 @@ export class StoryState {
 
 	indexOf(id: string): number {
 		return this.indices[id];
+	}
+
+	map(f: MapFunction<Story>): any {
+		return this.stories.map(f);
 	}
 }
