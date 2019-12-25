@@ -16,7 +16,7 @@ export interface ReceivedProps {
 	id?: string;
 }
 
-interface MenuData {
+export interface MenuData {
 	label: string;
 	value: string;
 }

@@ -11,8 +11,8 @@ interface StoryParams {
 export default class App extends React.Component {
 	render() {
 
-		const defaultRender = ({match}: RouteChildrenProps<StoryParams>): React.ReactNode => <>
-			<Landing/>
+		const defaultRender = ({match, history}: RouteChildrenProps<StoryParams>): React.ReactNode => <>
+			<Landing path={match?.path} history={history}/>
 			<Application id={match?.params.id}/>
 		</>;
 

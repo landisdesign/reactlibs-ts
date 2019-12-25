@@ -48,7 +48,7 @@ class WordRefConfig implements WordRefConfigData, Cloneable<WordRefConfigData> {
 
 type WordSource = ConfigSource | WordListConfig | WordRefConfig;
 
-class StoryConfig implements Cloneable<StoryConfig> {
+export class StoryConfig implements Cloneable<StoryConfig> {
 	readonly loaded: boolean = true;
 	readonly stories: StoryConfigData[];
 
@@ -85,9 +85,9 @@ export class ConfigState implements ConfigStateData, Cloneable<ConfigState> {
 			this.wordSources = [];
 			this.storySource = new ConfigSource('');
 		}
-		else if (!('loading' in o)) { // ConfigStateJSON
+		else if (!('loading' in o)) { // Received ConfigStateJSON -- loading has begun
 			const configJSON = o as ConfigStateJSON;
-			this.loading = false;
+			this.loading = true;
 			this.loaded = false;
 			this.wordSources = configJSON.wordSources.map(url => new ConfigSource(url) );
 			this.storySource = new ConfigSource(configJSON.storySource);
@@ -106,29 +106,26 @@ export class ConfigState implements ConfigStateData, Cloneable<ConfigState> {
 	}
 
 	loadWordData(source: WordConfigData, index: number): ConfigState {
-		const data: ConfigStateData = {...this};
-		data.wordSources = data.wordSources.map((currentSource, i) => {
-			if (i !== index ) {
-				return currentSource;
-			}
-			return ('words' in source) ? new WordListConfig(source) : new WordRefConfig(source);
-		});
-		return new ConfigState(data);
+		const newState: ConfigStateData = {...this};
+		newState.wordSources = [...this.wordSources];
+		newState.wordSources[index] = ('words' in source) ? new WordListConfig(source) : new WordRefConfig(source);
+		return new ConfigState(newState);
 	}
 
 	loadStoryData(source: StoryConfigData[]): ConfigState {
-		const data = {...this, storySource: new StoryConfig(source)};
-		return new ConfigState(data);
+		const newState: ConfigStateData = {...this};
+		newState.storySource = new StoryConfig(source);
+		return new ConfigState(newState);
 	}
 
 	loadLoadingState(loading: boolean, loaded: boolean): ConfigState {
-		const data = {...this, loading, loaded};
-		return new ConfigState(data);
+		const newState: ConfigStateData = {...this, loading, loaded};
+		return new ConfigState(newState);
 	}
 
 	getProgress(): ConfigProgress {
 		return {
-			current: this.wordSources.reduce((c, x) => +x.loaded + c, +this.storySource.loaded),
+			current: this.wordSources.reduce((current, wordSource) => current + (+wordSource.loaded), +this.storySource.loaded),
 			total: this.wordSources.length + 1
 		};
 	}

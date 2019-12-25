@@ -1,10 +1,6 @@
-import { Dispatch } from 'redux';
-import { ThunkAction } from 'redux-thunk';
-
 import { sleep } from '../../common';
 
-import { ReduxState } from '../index';
-import { BaseAction } from '../types';
+import { BaseAction, ReactlibThunkAction, ReactlibThunkDispatch } from '../types';
 import { initEntries } from '../entries/actions';
 
 import { ConfigStateJSON, StoryConfigData, WordConfigData } from './types';
@@ -75,8 +71,6 @@ class ResponseError extends Error {
  *	Asynchronous actions. These are the only actions available outside the module.
  */
 
-type ReactlibThunkAction<ReturnType = void> = ThunkAction<ReturnType, ReduxState, null, BaseAction>;
-
 /**
  *	Load the config file, then load the word and story files identified by the
  *	config. fetchConfig dispatches the above synchronous actions to update the
@@ -84,7 +78,7 @@ type ReactlibThunkAction<ReturnType = void> = ThunkAction<ReturnType, ReduxState
  *	minDelay fields dictate how long the startup process should take for the
  *	splash screen to be presented.
  */
-export function fetchConfig( {url: configUrl, minDelay}: {url: string, minDelay: number} ): ReactlibThunkAction {
+export function fetchConfig( configUrl: string, minDelay: number): ReactlibThunkAction {
 
 	const requestOptions: RequestInit = {
 		headers: new Headers({
@@ -102,7 +96,7 @@ export function fetchConfig( {url: configUrl, minDelay}: {url: string, minDelay:
 		}
 	}
 
-	function fetchWords(wordDataUrl: string, index: number, dispatch: Dispatch): Promise<void> {
+	function fetchWords(wordDataUrl: string, index: number, dispatch: ReactlibThunkDispatch): Promise<void> {
 		return fetch(wordDataUrl, requestOptions).then(async (response: Response) => {
 			checkStatus(response);
 			const wordData: WordConfigData = await response.json();
@@ -110,7 +104,7 @@ export function fetchConfig( {url: configUrl, minDelay}: {url: string, minDelay:
 		});
 	}
 
-	function fetchStories(storyListUrl: string, dispatch: Dispatch): Promise<void> {
+	function fetchStories(storyListUrl: string, dispatch: ReactlibThunkDispatch): Promise<void> {
 		return fetch(storyListUrl, requestOptions).then(async (response: Response) => {
 			checkStatus(response);
 			const storyData: StoryConfigData[] = await response.json();
@@ -119,7 +113,7 @@ export function fetchConfig( {url: configUrl, minDelay}: {url: string, minDelay:
 		});
 	}
 
-	return async function(dispatch: Dispatch): Promise<void> {
+	return async function(dispatch: ReactlibThunkDispatch): Promise<void> {
 		try {
 			const activationTime: number = minDelay + Date.now();
 			const response: Response = await fetch(configUrl, requestOptions);
@@ -152,7 +146,7 @@ export function fetchConfig( {url: configUrl, minDelay}: {url: string, minDelay:
  *	Signal that the UI has completed the landing page presentation.
  */
 export function acknowledgeConfigCompletion(delay: number = 0): ReactlibThunkAction {
-	return async function(dispatch: Dispatch): Promise<void> {
+	return async function(dispatch: ReactlibThunkDispatch): Promise<void> {
 		await sleep(delay);
 		dispatch(startApplication());
 	}

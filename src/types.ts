@@ -5,3 +5,7 @@ export interface Cloneable<T> {
 export class StringNumberMap {
 	[index: string]: number;
 }
+
+export class StringMap {
+	[index: string]: string;
+}

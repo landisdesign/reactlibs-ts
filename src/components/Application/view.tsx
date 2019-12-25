@@ -1,20 +1,20 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 
+import { arraysEqual, objectsEqual, shallowPropsChanged } from '../../common';
+
 import { ReduxProps, ReceivedProps } from './index';
 
 export type ApplicationProps = ReduxProps & ReceivedProps;
-export type ApplicationPropKeys = keyof ApplicationProps;
 
 export default class ApplicationView extends React.Component<ApplicationProps> {
 
 	shouldComponentUpdate(nextProps: ApplicationProps) {
 
-		const simpleKeys: ApplicationPropKeys[] = ['loaded', 'currentIndex', 'savedIndex', 'willClear', 'showStory', 'isRandom'];
-		const nextOptions = nextProps.options;
+		const shallowPropKeys = ['loaded', 'currentIndex', 'savedIndex', 'willClear', 'showStory', 'isRandom'];
 
-		return simpleKeys.some(key => this.props[key] !== nextProps[key])
-			|| this.props.options.some(({label, value}, i) => (label !== nextOptions[i].label) || (value !== nextOptions[i].value))
+		return shallowPropsChanged(this.props, nextProps, shallowPropKeys)
+			|| !arraysEqual(this.props.options, nextProps.options, objectsEqual);
 	}
 
 	render() {

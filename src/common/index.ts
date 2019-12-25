@@ -1,12 +1,12 @@
-interface EqualityFunction<T> {
+import React from 'react';
+
+import { StringMap } from '../types';
+
+interface BinaryPredicate<T> {
 	(a: T, b: T): boolean;
 }
 
-interface KeysEqualityFuncton<T> extends EqualityFunction<T> {
-	KeysType: keyof T;
-}
-
-interface IteratorFunction<T> {
+interface UnaryFunction<T> {
 	(a: T): void;
 }
 
@@ -14,13 +14,9 @@ interface VoidFunction {
 	(): void;
 }
 
-interface ClassMap {
-	[index: string]: string;
-}
-
-function arrayEquals<T> (a: T[], b: T[], entryValidator: EqualityFunction<T> = ((aField, bField) => aField === bField)): boolean {
-	if (!referenceEquals(a, b)) {
-		return false;
+export function arraysEqual<T> (a: T[], b: T[], entryValidator: BinaryPredicate<T> = ((aField, bField) => aField === bField)): boolean {
+	if (a === null || b === null) {
+		return a === b;
 	}
 	if (a.length !== b.length) {
 		return false;
@@ -28,9 +24,9 @@ function arrayEquals<T> (a: T[], b: T[], entryValidator: EqualityFunction<T> = (
 	return a.every((aField, index) => entryValidator(aField, b[index]));
 };
 
-const buildClassName = (styles: ClassMap):IteratorFunction<string> => name => styles[name];
+const buildClassName = (styles: StringMap):UnaryFunction<string> => name => styles[name];
 
-const buildClassNames = (styles: ClassMap, classNames: string[]):string => classNames.map(buildClassName(styles)).join(' ');
+const buildClassNames = (styles: StringMap, classNames: string[]):string => classNames.map(buildClassName(styles)).join(' ');
 
 const cancelEvent = (e: Event) => {
 	e.preventDefault();
@@ -42,45 +38,58 @@ const chooseList = (condition: boolean, trueList: string[], falseList: string[],
 	return additionalList ? list.concat(additionalList) : list;
 };
 
-const maskObject = (object: any, mask: any): any => Object.keys(mask).reduce((acc: any, key: string): any => {
-	if (key in object)
-		acc[key] = object[key];
-	return acc;
-}, {});
+function maskObject<T>(object: T, mask: Partial<T>): Partial<T> {
+	const maskKeys: (keyof T)[] = Object.keys(mask) as (keyof T)[];
+	return maskKeys.reduce((acc: Partial<T>, key: keyof T): Partial<T> => {
+		if (key in object)
+			acc[key] = object[key];
+		return acc;
+	}, {} as Partial<T>);
+}
 
 const noop = ():void =>{};
 
-function objectEquals(a: any, b: any) {
-	if (!referenceEquals(a, b)) {
-		return false;
+export function objectsEqual<T>(a: T, b: T) {
+	if (a === null || b === null) {
+		return a === b;
 	}
-	if (a === null) {
-		return true;
-	}
-	const aEntries: [string, any][] = Object.entries(a);
-	return aEntries.length === Object.keys(b).length && aEntries.every( ([key, value]: [string, any]): boolean => (b[key] === value) );
+	const aKeys: (keyof T)[] = Object.keys(a) as (keyof T)[];
+	return aKeys.length === Object.keys(b).length && aKeys.every(k => a[k] === b[k]);
 };
 
-/*
- *	Only use for objects or arrays.
- */
-const referenceEquals = (a: any, b: any) => {
-	if (a === b) {
-		return true;
+export function shallowPropsChanged<T>(priorProps: T, nextProps: T, keys: string[]): boolean {
+	const matchedKeys: (keyof T)[] = keys as (keyof T)[];
+	return matchedKeys.some(k => priorProps[k] !== nextProps[k]);
+}
+
+export function nodesEqual(a: React.ReactNode, b: React.ReactNode): boolean {
+	if (a === b) return true;
+
+	const aAny: any = a as any;
+	const bAny: any = b as any;
+	if ('displayName' in aAny) { // react component
+		if (aAny.displayName !== bAny.displayName) return false;
+		if (('key' in aAny) && aAny.key === bAny.key) return true;
 	}
-	return !(!a || !b); // one null but the other isn't
-};
+	else if ('type' in aAny) { // html element
+		if ('displayName' in bAny) return false;
+		if ('type' in bAny) {
+			if (aAny.type !== bAny.type) return false;
+			const aNodeList = React.Children.toArray(aAny);
+			const bNodeList = React.Children.toArray(aAny);
+			return arraysEqual(aNodeList, bNodeList, nodesEqual);
+		}
+	}
+	return !(('displayName' in bAny) || ('type' in bAny)); // b is not a primitve
+}
 
-const sleep = (ms: number): Promise<void> => new Promise<void>( (resolve: VoidFunction) => setTimeout(resolve, ms));
+export function childrenChanged(priorChildrenNodes: React.ReactNode = null, nextChildrenNodes: React.ReactNode = null): boolean {
+	if (priorChildrenNodes === null || nextChildrenNodes === null) {
+		return priorChildrenNodes !== nextChildrenNodes;
+	}
+	const priorChildren = React.Children.map(priorChildrenNodes, node => node);
+	const nextChildren = React.Children.map(nextChildrenNodes, node => node);
+	return !arraysEqual(priorChildren, nextChildren, nodesEqual);
+}
 
-export {
-	arrayEquals,
-	buildClassName,
-	buildClassNames,
-	cancelEvent,
-	chooseList,
-	maskObject,
-	noop,
-	objectEquals,
-	sleep
-};
+export const sleep = (ms: number): Promise<void> => new Promise<void>( (resolve: VoidFunction) => setTimeout(resolve, ms));
