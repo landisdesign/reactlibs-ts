@@ -1,0 +1,23 @@
+@import '../../common/_variables';
+
+.modal {
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	z-index: 10000;
+	display: grid;
+	grid: ". ..... ." 1fr
+	      ". modal ." auto
+	      ". ..... ." 1fr
+	      / 1fr fit-content(85%) 1fr;
+	background-color: rgba(0, 0, 0, .65);
+}
+
+.content {
+	grid-area: modal;
+	background-color: $color-canvas;
+	border-radius: .5rem;
+	padding: .5rem;
+}

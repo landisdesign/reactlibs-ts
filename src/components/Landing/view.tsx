@@ -1,9 +1,13 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 
-import { shallowPropsChanged } from '../../common';
-
 import { ReceivedProps, ReduxProps } from './index';
+
+import Copyright from '../../elements/Copyright';
+import Image from '../../elements/Image';
+import Modal from '../../layouts/Modal';
+import ProgressIndicator from '../../elements/ProgressIndicator';
+import Title from '../../elements/Title';
 
 type LandingProps = ReduxProps & ReceivedProps;
 
@@ -11,12 +15,6 @@ const configUrl = '/development/madlibs/config/config.json';
 const minimumSplashScreenDuration = 3000;
 
 export default class LandingView extends React.Component<LandingProps> {
-
-	shouldComponentUpdate(nextProps: LandingProps) {
-		const shallowPropKeys = ['configurationNeeded', 'configurationLoaded', 'readyToRedirect', 'current', 'total', 'path']; // we won't care about the sources until current === total
-		
-		return shallowPropsChanged(this.props, nextProps, shallowPropKeys);
-	}
 
 	render() {
 		const {
@@ -48,12 +46,12 @@ export default class LandingView extends React.Component<LandingProps> {
 		return redirect ? (
 			<Redirect to='/stories'/>
 		) : (
-			`Modal open=${landingVisible} fade=${configurationLoaded} background='#FFF' close=${false}`+
-				`Image src='/development/madlibs/logo.png' align='center'/`+
-				`Title'MadLibs, React style'/Title`+
-				`ProgressIndicator current=${current} max=${total} width='80%' backgroundColor='#DEF' /`+
-				`Copyright/`+
-			`/Modal`
+			<Modal isOpen={landingVisible} willTransition={configurationLoaded} background={{backgroundColor: '#FFF'}} showCloseButton={false}>
+				<Image src='/development/madlibs/logo.png' align='center'/>
+				<Title>MadLibs, React style</Title>
+				<ProgressIndicator current={current} max={total} width='80%' backgroundColor='#DEF'/>
+				<Copyright/>
+			</Modal>
 		);
 	}
 }

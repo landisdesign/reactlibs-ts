@@ -47,7 +47,7 @@ function maskObject<T>(object: T, mask: Partial<T>): Partial<T> {
 	}, {} as Partial<T>);
 }
 
-const noop = ():void =>{};
+export const noop = ():void =>{};
 
 export function objectsEqual<T>(a: T, b: T) {
 	if (a === null || b === null) {
