@@ -48,6 +48,7 @@ export default class LandingView extends React.Component<LandingProps> {
 		const {
 			configurationNeeded,
 			configurationLoaded,
+			isTransitioning,
 			readyToRedirect,
 			landingVisible,
 			current,
@@ -58,13 +59,12 @@ export default class LandingView extends React.Component<LandingProps> {
 		} = this.props;
 
 		const redirect = readyToRedirect && (path === '/'); // Fade is complete. Redirect if on the home page.
-		const transitioning = configurationNeeded || configurationLoaded;
 		const transitionListener = configurationLoaded ? () => startApplication() : undefined;
 
 		return redirect ? (
 			<Redirect to='/stories'/>
 		) : (
-			<Modal isOpen={landingVisible} isTransitioning={transitioning} onTransition={transitionListener} background={{backgroundColor: '#FFF'}} showCloseButton={false}>
+			<Modal isOpen={landingVisible} isTransitioning={isTransitioning} onTransition={transitionListener} background={{backgroundColor: '#FFF'}} showCloseButton={false}>
 				<Image src='/development/madlibs/logo.png' align='center'/>
 				<Title>MadLibs, React style</Title>
 				<ProgressIndicator current={current} max={total} width='80%' backgroundColor='#DEF'/>

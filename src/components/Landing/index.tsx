@@ -31,6 +31,7 @@ const mapState = ({config}: ReduxState) => {
 	const configurationNeeded = !loaded && !loading;
 	const landingVisible = !loaded;
 	const configurationLoaded = loaded && loading;
+	const isTransitioning = configurationNeeded || configurationLoaded;
 	const readyToRedirect = loaded && !loading;
 	/* We don't need these until all sources are loaded. Waiting until they are
 	   all loaded lets us ignore the interim possibility of these being unfetched
@@ -42,6 +43,7 @@ const mapState = ({config}: ReduxState) => {
 	return {
 		configurationNeeded,
 		configurationLoaded,
+		isTransitioning,
 		readyToRedirect,
 		landingVisible,
 		wordConfigs,
