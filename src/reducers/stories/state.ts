@@ -34,7 +34,7 @@ export class StoryState {
 	}
 
 	indexOf(id: string): number {
-		return this.indices[id];
+		return this.indices[id] ?? -1;
 	}
 
 	map(f: MapFunction<Story>): any {

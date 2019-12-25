@@ -27,19 +27,19 @@ const mapState = (state: ReduxState, ownProps: ReceivedProps) => {
 	const titles: string[] = options.map(({label}) => label);
 	options.push( {value: RANDOM_ID, label: 'Pick a random story'} );
 
-	const loaded = state.config.loaded;
+	const ready = state.config.loaded && titles.length > 0;
 	const {storyIndex: savedIndex, willClear, showStory} = state.ui;
 
 	const isRandom = ownProps.id === RANDOM_ID;
-	let currentIndex = state.stories.indexOf(ownProps.id ?? '') ?? -1;
-	if (currentIndex === -1 && isRandom) {
+	let currentIndex = state.stories.indexOf(ownProps.id ?? '');
+	if (currentIndex === -1 && isRandom && ready) {
 		currentIndex = savedIndex !== -1 ? savedIndex : Math.floor(Math.random() * titles.length);
 	}
 
 	return {
 		options,
 		titles,
-		loaded,
+		ready,
 		willClear,
 		showStory,
 		isRandom,
