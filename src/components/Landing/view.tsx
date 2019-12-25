@@ -46,7 +46,6 @@ export default class LandingView extends React.Component<LandingProps> {
 
 	render() {
 		const {
-			configurationNeeded,
 			configurationLoaded,
 			isTransitioning,
 			readyToRedirect,
