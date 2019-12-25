@@ -1,9 +1,11 @@
 import React from 'react';
 
-import { StringMap } from '../types';
-
 interface BinaryPredicate<T> {
 	(a: T, b: T): boolean;
+}
+
+interface UnaryPredicat<T> {
+	(a: T): boolean;
 }
 
 interface UnaryFunction<T> {
@@ -24,21 +26,7 @@ export function arraysEqual<T> (a: T[], b: T[], entryValidator: BinaryPredicate<
 	return a.every((aField, index) => entryValidator(aField, b[index]));
 };
 
-const buildClassName = (styles: StringMap):UnaryFunction<string> => name => styles[name];
-
-const buildClassNames = (styles: StringMap, classNames: string[]):string => classNames.map(buildClassName(styles)).join(' ');
-
-const cancelEvent = (e: Event) => {
-	e.preventDefault();
-	e.stopPropagation();
-};
-
-const chooseList = (condition: boolean, trueList: string[], falseList: string[], additionalList: string[]): string[] => {
-	const list = condition ? trueList : falseList;
-	return additionalList ? list.concat(additionalList) : list;
-};
-
-function maskObject<T>(object: T, mask: Partial<T>): Partial<T> {
+export function maskObject<T>(object: T, mask: Partial<T>): Partial<T> {
 	const maskKeys: (keyof T)[] = Object.keys(mask) as (keyof T)[];
 	return maskKeys.reduce((acc: Partial<T>, key: keyof T): Partial<T> => {
 		if (key in object)

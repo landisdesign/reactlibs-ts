@@ -7,7 +7,7 @@ import { ReduxState } from '../../reducers/';
 import { StoryConfigData, WordConfigData } from '../../reducers/config/types';
 import { StoryConfig } from '../../reducers/config/state';
 
-import { fetchConfig, acknowledgeConfigCompletion } from '../../reducers/config/actions';
+import { fetchConfig, startApplication } from '../../reducers/config/actions';
 import { loadStories } from '../../reducers/stories/actions';
 import { loadWords } from '../../reducers/words/actions';
 
@@ -52,11 +52,11 @@ const mapState = ({config}: ReduxState) => {
 
 const mapDispatch = (dispatch: ReactlibThunkDispatch) => ({
 	fetchConfig: (configUrl: string, minDelay: number) => dispatch(fetchConfig(configUrl, minDelay)),
-	startApplication: (storySources: StoryConfigData[], wordSources: WordConfigData[], fadeTime: number) => {
+	hydrateApplication: (storySources: StoryConfigData[], wordSources: WordConfigData[]) => {
 		dispatch(loadStories(storySources));
 		dispatch(loadWords(wordSources));
-		dispatch(acknowledgeConfigCompletion(fadeTime));
-	}
+	},
+	startApplication: () => dispatch(startApplication())
 });
 
 const connector = connect(mapState, mapDispatch);

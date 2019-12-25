@@ -16,6 +16,34 @@ const minimumSplashScreenDuration = 3000;
 
 export default class LandingView extends React.Component<LandingProps> {
 
+	componentDidMount() {
+
+		const {
+			configurationNeeded,
+
+			fetchConfig
+		} = this.props;
+
+		if (configurationNeeded) {
+			fetchConfig(configUrl, minimumSplashScreenDuration);
+		}
+	}
+
+	componentDidUpdate(prevProps: LandingProps) {
+
+		const {
+			configurationLoaded,
+			storyConfigs,
+			wordConfigs,
+
+			hydrateApplication
+		} = this.props;
+
+		if (configurationLoaded && !prevProps.configurationLoaded) {
+			hydrateApplication(storyConfigs, wordConfigs);
+		}
+	}
+
 	render() {
 		const {
 			configurationNeeded,
@@ -24,29 +52,19 @@ export default class LandingView extends React.Component<LandingProps> {
 			landingVisible,
 			current,
 			total,
-			wordConfigs,
-			storyConfigs,
 			path,
 
-			fetchConfig,
 			startApplication
 		} = this.props;
 
 		const redirect = readyToRedirect && (path === '/'); // Fade is complete. Redirect if on the home page.
-
-		if (configurationNeeded) {
-			fetchConfig(configUrl, minimumSplashScreenDuration);
-		}
-
-		if (configurationLoaded) {
-			startApplication(storyConfigs, wordConfigs, 600);
-		}
-
+		const transitioning = configurationNeeded || configurationLoaded;
+		const transitionListener = configurationLoaded ? () => startApplication() : undefined;
 
 		return redirect ? (
 			<Redirect to='/stories'/>
 		) : (
-			<Modal isOpen={landingVisible} willTransition={configurationLoaded} background={{backgroundColor: '#FFF'}} showCloseButton={false}>
+			<Modal isOpen={landingVisible} isTransitioning={transitioning} onTransition={transitionListener} background={{backgroundColor: '#FFF'}} showCloseButton={false}>
 				<Image src='/development/madlibs/logo.png' align='center'/>
 				<Title>MadLibs, React style</Title>
 				<ProgressIndicator current={current} max={total} width='80%' backgroundColor='#DEF'/>

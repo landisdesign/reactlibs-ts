@@ -1,107 +1,108 @@
 import React from 'react';
 
-import { noop } from '../../common';
+import { sleep } from '../../common';
 
 import styles from './Modal.module.scss';
 
-type ModalCloseEventType = React.BaseSyntheticEvent<null, HTMLElement, HTMLElement>;
+import { ModalCloseEvent, ModalTransitionEvent } from './events';
 
-interface ModalTransitionEventType extends React.BaseSyntheticEvent<null, HTMLElement, HTMLElement> {
-	opening: boolean;
+export interface ModalTransitionEventListener {
+	(e: ModalTransitionEvent): void;
 }
 
-abstract class BaseEvent {
-	readonly bubbles: boolean = false;
-	readonly eventPhase: number = Event.AT_TARGET;
-	readonly timeStamp: number = Date.now();
-
-	readonly nativeEvent: never;
-	readonly currentTarget: HTMLElement;
-	readonly target: HTMLElement;
-	readonly isTrusted: boolean;
-	readonly cancelable: boolean;
-	readonly type: string;
-
-	private _defaultPrevented: boolean = false;
-	private propagationStopped: boolean = false;
-
-	constructor(type: string, cancelable: boolean, target: HTMLElement, trusted: boolean) {
-		this.type = type;
-		this.cancelable = cancelable;
-		this.isTrusted = trusted;
-		this.currentTarget = this.target = target;
-	}
-
-	persist(): void {}
-
-	preventDefault(): void {
-		this._defaultPrevented = true;
-	}
-
-	get defaultPrevented(): boolean {
-		return this._defaultPrevented;
-	}
-
-	isDefaultPrevented(): boolean {
-		return this._defaultPrevented;
-	}
-
-	stopPropagation(): void {
-		this.propagationStopped = true;
-	}
-
-	isPropagationStopped(): boolean {
-		return this.propagationStopped;
-	}
-}
-
-const MODAL_CLOSE_EVENT_TYPE: string = 'modalClose';
-class ModalCloseEvent extends BaseEvent implements ModalCloseEventType {
-	constructor(target: HTMLElement, trusted: boolean) {
-		super(MODAL_CLOSE_EVENT_TYPE, true, target, trusted);
-	}
-}
-
-const TRANSITION_EVENT_TYPE: string = 'modalTransition';
-class ModalTransitionEvent extends BaseEvent implements ModalTransitionEventType {
-	readonly opening: boolean;
-	constructor(target: HTMLElement, trusted: boolean, opening: boolean) {
-		super(TRANSITION_EVENT_TYPE, false, target, trusted);
-		this.opening = opening;
-	}
+export interface ModalCloseEventListener {
+	(e: ModalCloseEvent): void;
 }
 
 interface ModalProps {
 	isOpen?: boolean;
-	willTransition?: boolean;
+	isTransitioning?: boolean;
 	showCloseButton?: boolean;
-	transitionListener?: (e: ModalTransitionEvent) => void;
-	closeListener?: (e: ModalCloseEvent) => void;
+	onTransition?: ModalTransitionEventListener;
+	onClose?: ModalCloseEventListener;
 	title?: string
 	background?: React.CSSProperties;
 	children?: React.ReactNode;
 };
 
-export default class Modal extends React.Component<ModalProps> {
+const buildClassNames = (classNames: string[]): string => classNames.map(className => styles[className]).join(' ');
+
+export default class Modal extends React.PureComponent<ModalProps> {
+
+	contentDiv: React.RefObject<HTMLDivElement>;
+	modalDiv: React.RefObject<HTMLDivElement>;
+
+	constructor(props: ModalProps) {
+		super(props);
+		this.contentDiv = React.createRef();
+		this.modalDiv = React.createRef();
+	}
+
+	async transition() {
+		const modalDiv = this.modalDiv.current;
+		if (!modalDiv) {
+			return;
+		}
+
+		const {
+			isOpen = true,
+			onTransition
+		} = this.props;
+
+		const transitionClassNames = ['modal', isOpen ? 'opening' : 'closing'];
+		const finishedClassNames = [...transitionClassNames];
+		if (isOpen) {
+			finishedClassNames.push('open');
+		}
+
+		modalDiv.className = buildClassNames(transitionClassNames);
+		await sleep(1);
+		modalDiv.className = buildClassNames(finishedClassNames);
+
+		if (onTransition) {
+			await sleep(isOpen ? 650 : 350);
+			const transitionEvent = new ModalTransitionEvent(modalDiv, true, isOpen);
+			onTransition(transitionEvent);
+		}
+	}
+
+	componentDidMount() {
+		if (this.props.isTransitioning) {
+			this.transition();
+		}
+	}
+
+	componentDidUpdate(prevProps: ModalProps) {
+		if ( (this.props.isOpen !== prevProps.isOpen) && this.props.isTransitioning) {
+			this.transition();
+		}
+	}
 
 	render() {
 
 		const {
 			isOpen = true,
-			willTransition = false,
+			isTransitioning = false,
 			showCloseButton = false,
-			transitionListener = noop,
-			closeListener = noop,
+			onClose = null,
 			title = '',
 			background,
 			children = null
 		} = this.props;
 
+		const containerClassNames = ['modal'];
+		if (!isTransitioning) {
+			containerClassNames.push(isOpen ? 'open' : 'closed');
+		}
+		else if (!isOpen) {
+			containerClassNames.push('open');
+		}
+
 		return (
-			<div className={styles.modal} style={ background }>
+			<div className={buildClassNames(containerClassNames)} style={ background } ref={this.modalDiv}>
 				<div className={styles.content}>
-					ModalHeader title={title} closeListener={closeListener}/
-					<div>
+					ModalHeader title={title} onClose={onClose} showCloseButton={showCloseButton}/
+					<div ref={this.contentDiv}>
 						{ children }
 					</div>
 				</div>

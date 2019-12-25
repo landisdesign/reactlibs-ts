@@ -11,6 +11,15 @@ export const LOAD_WORD_LIST = 'LOAD_WORD_LIST';
 export const RECONCILE_CONFIG = 'RECONCILE_CONFIG';
 export const START_APPLICATION = 'START_APPLICATION';
 
+class ResponseError extends Error {
+	response: Response;
+
+	constructor(message: string, response: Response) {
+		super(message);
+		this.response = response;
+	}
+}
+
 export interface InitConfigAction extends BaseAction {
 	payload: ConfigStateJSON;
 }
@@ -54,22 +63,9 @@ const reconcileConfig = (): ReconcileConfigAction => ({
 	type: RECONCILE_CONFIG
 });
 
-const startApplication = (): StartApplicationAction => ({
+export const startApplication = (): StartApplicationAction => ({
 	type: START_APPLICATION
 });
-
-class ResponseError extends Error {
-	response: Response;
-
-	constructor(message: string, response: Response) {
-		super(message);
-		this.response = response;
-	}
-}
-
-/*
- *	Asynchronous actions. These are the only actions available outside the module.
- */
 
 /**
  *	Load the config file, then load the word and story files identified by the
@@ -140,14 +136,4 @@ export function fetchConfig( configUrl: string, minDelay: number): ReactlibThunk
 			}
 		}
 	};
-}
-
-/**
- *	Signal that the UI has completed the landing page presentation.
- */
-export function acknowledgeConfigCompletion(delay: number = 0): ReactlibThunkAction {
-	return async function(dispatch: ReactlibThunkDispatch): Promise<void> {
-		await sleep(delay);
-		dispatch(startApplication());
-	}
 }

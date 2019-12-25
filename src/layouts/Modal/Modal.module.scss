@@ -13,11 +13,45 @@
 	      ". ..... ." 1fr
 	      / 1fr fit-content(85%) 1fr;
 	background-color: rgba(0, 0, 0, .65);
-}
+	opacity: 0;
+	transition-property: opacity;
 
-.content {
-	grid-area: modal;
-	background-color: $color-canvas;
-	border-radius: .5rem;
-	padding: .5rem;
+	.content {
+		grid-area: modal;
+		background-color: $color-canvas;
+		border-radius: .5rem;
+		padding: .5rem;
+		opacity: 0;
+		transition-property: opacity;
+	}
+
+	&.open {
+		opacity: 1;
+
+		.content {
+			opacity: 1;
+		}
+	}
+
+	&.closed {
+		display: none;
+	}
+
+	&.opening {
+		transition-duration: .15s;
+
+		.content {
+			transition-duration: .3s;
+			transition-delay: .35s;
+		}
+	}
+
+	&.closing {
+		transition-duration: .1s;
+		transition-delay: .25s;
+
+		.content {
+			transition-duration: .2s;
+		}
+	}
 }
