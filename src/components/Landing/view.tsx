@@ -3,6 +3,8 @@ import { Redirect } from 'react-router-dom';
 
 import { ReceivedProps, ReduxProps } from './index';
 
+import { APP_PREFIX, CONFIG_URL, SPLASH_SCREEN_DURATION } from '../../common';
+
 import Copyright from '../../elements/Copyright';
 import Image from '../../elements/Image';
 import Modal from '../../layouts/Modal';
@@ -11,8 +13,6 @@ import Title from '../../elements/Title';
 
 type LandingProps = ReduxProps & ReceivedProps;
 
-const configUrl = '/development/madlibs/config/config.json';
-const minimumSplashScreenDuration = 3000;
 
 export default class LandingView extends React.Component<LandingProps> {
 
@@ -25,7 +25,7 @@ export default class LandingView extends React.Component<LandingProps> {
 		} = this.props;
 
 		if (configurationNeeded) {
-			fetchConfig(configUrl, minimumSplashScreenDuration);
+			fetchConfig(CONFIG_URL, SPLASH_SCREEN_DURATION);
 		}
 	}
 
@@ -61,7 +61,7 @@ export default class LandingView extends React.Component<LandingProps> {
 		const transitionListener = configurationLoaded ? () => startApplication() : undefined;
 
 		return redirect ? (
-			<Redirect to='/stories'/>
+			<Redirect to={APP_PREFIX}/>
 		) : (
 			<Modal isOpen={landingVisible} isTransitioning={isTransitioning} onTransition={transitionListener} onBeforeClose={e => e.preventDefault()} background={{backgroundColor: '#FFF'}} showCloseButton={false}>
 				<Image src='/development/madlibs/logo.png' align='center'/>

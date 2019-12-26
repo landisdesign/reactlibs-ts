@@ -1,6 +1,8 @@
 import React from 'react';
 import { Switch, Route, Redirect, RouteChildrenProps } from 'react-router-dom';
 
+import { APP_PREFIX } from './common';
+
 import Landing from './components/Landing';
 import Application from './components/Application';
 
@@ -20,8 +22,8 @@ export default class App extends React.Component {
 	render() {
 
 		return <Switch>
-			<Route path={['/stories/:id']} render={this.appOutput}/>
-			<Route path={['/', '/stories']} exact={true} render={this.appOutput}/>
+			<Route path={[APP_PREFIX + ':id']} render={this.appOutput}/>
+			<Route path={['/', APP_PREFIX]} exact={true} render={this.appOutput}/>
 			<Route><Redirect to='/'/></Route>
 		</Switch>;
 	}

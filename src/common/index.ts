@@ -1,5 +1,10 @@
 import React from 'react';
 
+export const CONFIG_URL = '/development/madlibs/config/config.json';
+export const SPLASH_SCREEN_DURATION = 3000;
+export const RANDOM_ID = 'surprise';
+export const APP_PREFIX = '/stories/';
+
 interface BinaryPredicate<T> {
 	(a: T, b: T): boolean;
 }

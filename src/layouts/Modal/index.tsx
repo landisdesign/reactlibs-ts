@@ -27,8 +27,6 @@ interface ModalProps {
 
 const buildClassNames = (classNames: string[]): string => classNames.map(className => styles[className]).join(' ');
 
-const KEY_UP_EVENT_TYPE = 'keyup';
-
 export default class Modal extends React.PureComponent<ModalProps> {
 
 	contentDiv: React.RefObject<HTMLDivElement>;
@@ -115,17 +113,17 @@ export default class Modal extends React.PureComponent<ModalProps> {
 			this.transition();
 		}
 		if (this.props.isOpen) {
-			document.addEventListener(KEY_UP_EVENT_TYPE, this.closeKeyEventListener);
+			document.addEventListener('keyup', this.closeKeyEventListener);
 		}
 	}
 
 	componentDidUpdate(prevProps: ModalProps) {
 		if (this.props.isOpen !== prevProps.isOpen) {
 			if (this.props.isOpen) {
-				document.addEventListener(KEY_UP_EVENT_TYPE, this.closeKeyEventListener);
+				document.addEventListener('keyup', this.closeKeyEventListener);
 			}
 			else {
-				document.removeEventListener(KEY_UP_EVENT_TYPE, this.closeKeyEventListener);
+				document.removeEventListener('keyup', this.closeKeyEventListener);
 			}
 			if (this.props.isTransitioning) {
 				this.transition();
@@ -135,7 +133,7 @@ export default class Modal extends React.PureComponent<ModalProps> {
 
 	componentWillUnmount() {
 		if (this.props.isOpen) {
-			document.removeEventListener(KEY_UP_EVENT_TYPE, this.closeKeyEventListener);
+			document.removeEventListener('keyup', this.closeKeyEventListener);
 		}
 	}
 

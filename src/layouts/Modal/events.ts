@@ -53,7 +53,7 @@ abstract class BaseEvent implements BaseEventType {
 	}
 }
 
-const MODAL_CLOSE_EVENT_TYPE: string = 'modalClose';
+export const MODAL_CLOSE_EVENT_TYPE: string = 'modalClose';
 
 export class ModalCloseEvent extends BaseEvent implements ModalCloseEventType {
 	constructor(target: HTMLElement | null, trusted: boolean) {
@@ -61,7 +61,8 @@ export class ModalCloseEvent extends BaseEvent implements ModalCloseEventType {
 	}
 }
 
-const TRANSITION_EVENT_TYPE: string = 'modalTransition';
+export const TRANSITION_EVENT_TYPE: string = 'modalTransition';
+
 export class ModalTransitionEvent extends BaseEvent implements ModalTransitionEventType {
 	readonly opening: boolean;
 

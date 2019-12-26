@@ -2,14 +2,14 @@ import { History } from 'history';
 import { Dispatch } from 'redux';
 import { connect, ConnectedProps } from 'react-redux';
 
+import { RANDOM_ID } from '../../common';
+
 import { ReduxState } from '../../reducers/';
 
 import { clearEntries } from '../../reducers/entries/actions';
 import { setOutput, setRandom, setShowStory, setStoryIndex, setWillClear } from '../../reducers/ui/actions';
 
 import ApplicationView from './view';
-
-export const RANDOM_ID = 'surprise';
 
 export type ReduxProps = ConnectedProps<typeof connector>;
 

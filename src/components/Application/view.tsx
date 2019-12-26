@@ -3,9 +3,9 @@ import { Redirect } from 'react-router-dom';
 
 import Select, { ValueType } from 'react-select';
 
-import { shallowPropsChanged } from '../../common';
+import { shallowPropsChanged, APP_PREFIX, RANDOM_ID } from '../../common';
 
-import { ReduxProps, ReceivedProps, MenuData, RANDOM_ID } from './index';
+import { ReduxProps, ReceivedProps, MenuData } from './index';
 
 import Copyright from '../../elements/Copyright';
 import Title from '../../elements/Title';
@@ -33,7 +33,7 @@ export default class ApplicationView extends React.Component<ApplicationProps> {
 			if (value === RANDOM_ID) {
 				setStoryIndex(-1);
 			}
-			history.push('/stories/' + value);
+			history.push(APP_PREFIX + value);
 			setWillClear();
 		}
 	}
@@ -108,7 +108,7 @@ export default class ApplicationView extends React.Component<ApplicationProps> {
 		}
 
 		if (id && currentIndex === -1) {
-			return <Redirect to='/stories'/>;
+			return <Redirect to={APP_PREFIX}/>;
 		}
 
 		const index = isRandom ? options.length - 1 : currentIndex;
