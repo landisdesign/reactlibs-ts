@@ -1,3 +1,4 @@
+import { History } from 'history';
 import { Dispatch } from 'redux';
 import { connect, ConnectedProps } from 'react-redux';
 
@@ -8,11 +9,12 @@ import { setOutput, setRandom, setShowStory, setStoryIndex, setWillClear } from 
 
 import ApplicationView from './view';
 
-const RANDOM_ID = 'surprise';
+export const RANDOM_ID = 'surprise';
 
 export type ReduxProps = ConnectedProps<typeof connector>;
 
 export interface ReceivedProps {
+	history: History;
 	id?: string;
 }
 
@@ -23,8 +25,8 @@ export interface MenuData {
 
 const mapState = (state: ReduxState, ownProps: ReceivedProps) => {
 
-	const options: MenuData[] = state.stories.map(({id, title}) => ({value: id, label: title}));
-	const titles: string[] = options.map(({label}) => label);
+	const options:MenuData[] = state.stories.map(({id, title}) => ({value: id, label: title}));
+	const titles: string[] = options.map(({label}:{label:string}) => label);
 	options.push( {value: RANDOM_ID, label: 'Pick a random story'} );
 
 	const ready = state.config.loaded && titles.length > 0;
@@ -56,7 +58,9 @@ const mapDispatch = (dispatch: Dispatch) => ({
 		dispatch(setShowStory(false));
 		dispatch(clearEntries(index));
 		dispatch(setWillClear(false));
-	}
+	},
+	// View will never need to set clear independently. Prevent accidents by removing parameter for view.
+	setWillClear: () => dispatch(setWillClear(true))
 });
 
 const connector = connect(mapState, mapDispatch);

@@ -1,20 +1,48 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 
-import { arraysEqual, objectsEqual, shallowPropsChanged } from '../../common';
+import Select, { ValueType } from 'react-select';
 
-import { ReduxProps, ReceivedProps } from './index';
+import { shallowPropsChanged } from '../../common';
+
+import { ReduxProps, ReceivedProps, MenuData, RANDOM_ID } from './index';
+
+import Copyright from '../../elements/Copyright';
+import Title from '../../elements/Title';
+
+import styles from './Application.module.scss';
 
 export type ApplicationProps = ReduxProps & ReceivedProps;
 
 export default class ApplicationView extends React.Component<ApplicationProps> {
 
+	constructor(props: ApplicationProps) {
+		super(props);
+		this.onChange = this.onChange.bind(this);
+	}
+
+	onChange(selectedOption: ValueType<MenuData>) {
+		if (selectedOption) {
+			const { value } = selectedOption as MenuData;
+			const {
+				history,
+
+				setStoryIndex,
+				setWillClear
+			} = this.props;
+			if (value === RANDOM_ID) {
+				setStoryIndex(-1);
+			}
+			history.push('/stories/' + value);
+			setWillClear();
+		}
+	}
+
 	shouldComponentUpdate(nextProps: ApplicationProps) {
 
 		const shallowPropKeys = ['ready', 'currentIndex', 'savedIndex', 'willClear', 'showStory', 'isRandom'];
 
-		return shallowPropsChanged(this.props, nextProps, shallowPropKeys)
-			|| !arraysEqual(this.props.options, nextProps.options, objectsEqual);
+		return shallowPropsChanged(this.props, nextProps, shallowPropKeys);
 	}
 
 	componentDidMount() {
@@ -50,7 +78,7 @@ export default class ApplicationView extends React.Component<ApplicationProps> {
 			resetScreen
 		} = this.props;
 
-		if (ready && (ready !== prevProps.ready) ) {
+		if (ready) {
 			if (isRandom !== prevProps.isRandom) {
 				setRandom(isRandom);
 			}
@@ -71,6 +99,7 @@ export default class ApplicationView extends React.Component<ApplicationProps> {
 			options,
 			titles,
 			isRandom,
+			showStory,
 			id
 		} = this.props;
 
@@ -82,19 +111,25 @@ export default class ApplicationView extends React.Component<ApplicationProps> {
 			return <Redirect to='/stories'/>;
 		}
 
-		let index = isRandom ? currentIndex : options.length - 1;
+		const index = isRandom ? options.length - 1 : currentIndex;
 		const title = isRandom ? '(Mystery story)' : (index === -1 ? '\xA0' : titles[index]); // \xA0 maintains space for title
 
-		// to be replaced by actual ApplicationView content
-		return <dl>
-			<dt>id:</dt><dd>{id}</dd>
-			<dt>ready:</dt><dd>{ready.toString()}</dd>
-			<dt>isRandom:</dt><dd>{isRandom.toString()}</dd>
-			<dt>currentIndex:</dt><dd>{currentIndex}</dd>
-			<dt>options:</dt><dd><ul>{ options.map(({label, value}) => <li>{label} ({value})</li>) }</ul></dd>
-			<dt>titles:</dt><dd><ul>{ titles.map(title => <li>{title}</li>) }</ul></dd>
-			<dt>title:</dt><dd>{title}</dd>
-			<dt>index:</dt><dd>{index}</dd>
-		</dl>;
+		return 	<>
+			<div className={styles.application}>
+				<Title packed={true}>MadLibs, React style</Title>
+				<Select className={styles.selector} options={options} value={options[index]} onChange={this.onChange} isSearchable={false} />
+				<Title>{title}</Title>
+				MasterDetailLayout masterLabel='Words' detailLabel='Story' highlightDetail={showStory} highlightDetailCallback=showDetail
+					MasterPanel highlightDetail={showStory}
+						WordsPanel/
+					/MasterPanel
+					DetailPanel highlightDetail={showStory}
+						StoryPanel/
+					/DetailPanel
+				/MasterDetailLayout
+				<Copyright/>
+			</div>
+			EmailModal/
+		</>;
 	}
 }
