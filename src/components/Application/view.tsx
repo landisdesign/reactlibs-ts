@@ -17,22 +17,61 @@ export default class ApplicationView extends React.Component<ApplicationProps> {
 			|| !arraysEqual(this.props.options, nextProps.options, objectsEqual);
 	}
 
+	componentDidMount() {
+		const {
+			ready,
+			currentIndex,
+			willClear,
+			isRandom,
+
+			setRandom,
+			setStoryIndex,
+			resetScreen
+		} = this.props;
+
+		if (ready) {
+			setRandom(isRandom);
+			setStoryIndex(currentIndex);
+			if (willClear) {
+				resetScreen(currentIndex);
+			}
+		}
+	}
+
+	componentDidUpdate(prevProps: ApplicationProps) {
+		const {
+			ready,
+			currentIndex,
+			willClear,
+			isRandom,
+
+			setRandom,
+			setStoryIndex,
+			resetScreen
+		} = this.props;
+
+		if (ready && (ready !== prevProps.ready) ) {
+			if (isRandom !== prevProps.isRandom) {
+				setRandom(isRandom);
+			}
+			if (currentIndex !== prevProps.currentIndex) {
+				setStoryIndex(currentIndex);
+			}
+			if (willClear && (willClear !== prevProps.willClear) ) {
+				resetScreen(currentIndex);
+			}
+		}
+	}
+
 	render() {
 
 		const {
 			ready,
 			currentIndex,
-			savedIndex,
-			willClear,
-			showStory,
 			options,
 			titles,
 			isRandom,
-			id,
-
-			setRandom,
-			setStoryIndex,
-			resetScreen
+			id
 		} = this.props;
 
 		if (!ready) {
@@ -41,12 +80,6 @@ export default class ApplicationView extends React.Component<ApplicationProps> {
 
 		if (id && currentIndex === -1) {
 			return <Redirect to='/stories'/>;
-		}
-
-		setRandom(isRandom);
-		setStoryIndex(currentIndex);
-		if (willClear) {
-			resetScreen(currentIndex);
 		}
 
 		let index = isRandom ? currentIndex : options.length - 1;
@@ -58,9 +91,6 @@ export default class ApplicationView extends React.Component<ApplicationProps> {
 			<dt>ready:</dt><dd>{ready.toString()}</dd>
 			<dt>isRandom:</dt><dd>{isRandom.toString()}</dd>
 			<dt>currentIndex:</dt><dd>{currentIndex}</dd>
-			<dt>savedIndex:</dt><dd>{savedIndex}</dd>
-			<dt>willClear:</dt><dd>{willClear.toString()}</dd>
-			<dt>showStory:</dt><dd>{showStory.toString()}</dd>
 			<dt>options:</dt><dd><ul>{ options.map(({label, value}) => <li>{label} ({value})</li>) }</ul></dd>
 			<dt>titles:</dt><dd><ul>{ titles.map(title => <li>{title}</li>) }</ul></dd>
 			<dt>title:</dt><dd>{title}</dd>
