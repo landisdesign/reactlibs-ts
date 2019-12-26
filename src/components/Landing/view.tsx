@@ -63,7 +63,7 @@ export default class LandingView extends React.Component<LandingProps> {
 		return redirect ? (
 			<Redirect to='/stories'/>
 		) : (
-			<Modal isOpen={landingVisible} isTransitioning={isTransitioning} onTransition={transitionListener} background={{backgroundColor: '#FFF'}} showCloseButton={false}>
+			<Modal isOpen={landingVisible} isTransitioning={isTransitioning} onTransition={transitionListener} onBeforeClose={e => e.preventDefault()} background={{backgroundColor: '#FFF'}} showCloseButton={false}>
 				<Image src='/development/madlibs/logo.png' align='center'/>
 				<Title>MadLibs, React style</Title>
 				<ProgressIndicator current={current} max={total} width='80%' backgroundColor='#DEF'/>

@@ -19,7 +19,7 @@ interface ModalProps {
 	isTransitioning?: boolean;
 	showCloseButton?: boolean;
 	onTransition?: ModalTransitionEventListener;
-	onClose?: ModalCloseEventListener;
+	onBeforeClose?: ModalCloseEventListener;
 	title?: string
 	background?: React.CSSProperties;
 	children?: React.ReactNode;
@@ -27,18 +27,24 @@ interface ModalProps {
 
 const buildClassNames = (classNames: string[]): string => classNames.map(className => styles[className]).join(' ');
 
+const KEY_UP_EVENT_TYPE = 'keyup';
+
 export default class Modal extends React.PureComponent<ModalProps> {
 
 	contentDiv: React.RefObject<HTMLDivElement>;
 	modalDiv: React.RefObject<HTMLDivElement>;
+	closed: boolean;
 
 	constructor(props: ModalProps) {
 		super(props);
 		this.contentDiv = React.createRef();
 		this.modalDiv = React.createRef();
+		this.closed = false;
+		this.closeKeyEventListener = this.closeKeyEventListener.bind(this);
+		this.closeMouseEventListener = this.closeMouseEventListener.bind(this);
 	}
 
-	async transition() {
+	private async transition(forceClosed: boolean = false) {
 		const modalDiv = this.modalDiv.current;
 		if (!modalDiv) {
 			return;
@@ -49,9 +55,11 @@ export default class Modal extends React.PureComponent<ModalProps> {
 			onTransition
 		} = this.props;
 
-		const transitionClassNames = ['modal', isOpen ? 'opening' : 'closing'];
+		const transitionToOpen = isOpen && !forceClosed;
+
+		const transitionClassNames = ['modal', transitionToOpen ? 'opening' : 'closing'];
 		const finishedClassNames = [...transitionClassNames];
-		if (isOpen) {
+		if (transitionToOpen) {
 			finishedClassNames.push('open');
 		}
 
@@ -60,32 +68,96 @@ export default class Modal extends React.PureComponent<ModalProps> {
 		modalDiv.className = buildClassNames(finishedClassNames);
 
 		if (onTransition) {
-			await sleep(isOpen ? 650 : 350);
+			await sleep(transitionToOpen ? 650 : 350);
 			const transitionEvent = new ModalTransitionEvent(modalDiv, true, isOpen);
 			onTransition(transitionEvent);
 		}
+	}
+
+	private closeKeyEventListener(e: KeyboardEvent) {
+		if (e.key === 'Esc' || e.key === 'Escape') {
+			this.conditionallyCloseModal();
+		}
+	}
+
+	private closeMouseEventListener() {
+		this.conditionallyCloseModal();
+	}
+
+	private conditionallyCloseModal() {
+		const modalDiv = this.modalDiv.current;
+		if (!modalDiv) {
+			return;
+		}
+
+		if (!this.props.isOpen || this.closed) {
+			return;
+		}
+		if (this.props.onBeforeClose) {
+			const modalCloseEvent = new ModalCloseEvent(modalDiv, true);
+			this.props.onBeforeClose(modalCloseEvent);
+			if (modalCloseEvent.defaultPrevented) {
+				return;
+			}
+		}
+
+		if (this.props.isTransitioning) {
+			this.transition(true);
+		}
+		else {
+			modalDiv.className = styles.modal;
+		}
+		this.closed = true;
 	}
 
 	componentDidMount() {
 		if (this.props.isTransitioning) {
 			this.transition();
 		}
-	}
-
-	componentDidUpdate(prevProps: ModalProps) {
-		if ( (this.props.isOpen !== prevProps.isOpen) && this.props.isTransitioning) {
-			this.transition();
+		if (this.props.isOpen) {
+			document.addEventListener(KEY_UP_EVENT_TYPE, this.closeKeyEventListener);
 		}
 	}
 
-	render() {
+	componentDidUpdate(prevProps: ModalProps) {
+		if (this.props.isOpen !== prevProps.isOpen) {
+			if (this.props.isOpen) {
+				document.addEventListener(KEY_UP_EVENT_TYPE, this.closeKeyEventListener);
+			}
+			else {
+				document.removeEventListener(KEY_UP_EVENT_TYPE, this.closeKeyEventListener);
+			}
+			if (this.props.isTransitioning) {
+				this.transition();
+			}
+		}
+	}
 
+	componentWillUnmount() {
+		if (this.props.isOpen) {
+			document.removeEventListener(KEY_UP_EVENT_TYPE, this.closeKeyEventListener);
+		}
+	}
+
+	private renderHeader(): React.ReactNode | null {
+		const {
+			title,
+			showCloseButton
+		} = this.props;
+
+		return (title || showCloseButton)
+			?	<h1 className={styles.modalHeader}>
+					<span>{title}</span>
+					{showCloseButton ? <span className={styles.close} onClick={this.closeMouseEventListener}>Close actionable={true}/</span> : null }
+				</h1>
+			: null
+		;
+	}
+
+	render() {
 		const {
 			isOpen = true,
 			isTransitioning = false,
-			showCloseButton = false,
-			onClose = null,
-			title = '',
 			background,
 			children = null
 		} = this.props;
@@ -101,7 +173,7 @@ export default class Modal extends React.PureComponent<ModalProps> {
 		return (
 			<div className={buildClassNames(containerClassNames)} style={ background } ref={this.modalDiv}>
 				<div className={styles.content}>
-					ModalHeader title={title} onClose={onClose} showCloseButton={showCloseButton}/
+					{ this.renderHeader() }
 					<div ref={this.contentDiv}>
 						{ children }
 					</div>
