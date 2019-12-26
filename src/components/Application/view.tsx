@@ -10,6 +10,8 @@ import { ReduxProps, ReceivedProps, MenuData } from './index';
 import Copyright from '../../elements/Copyright';
 import Title from '../../elements/Title';
 
+import StoryPanel from '../StoryPanel';
+
 import styles from './Application.module.scss';
 
 export type ApplicationProps = ReduxProps & ReceivedProps;
@@ -124,7 +126,7 @@ export default class ApplicationView extends React.Component<ApplicationProps> {
 						WordsPanel/
 					/MasterPanel
 					DetailPanel highlightDetail={showStory}
-						StoryPanel/
+						<StoryPanel/>
 					/DetailPanel
 				/MasterDetailLayout
 				<Copyright/>
