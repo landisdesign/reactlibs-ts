@@ -13,7 +13,7 @@ const objectMask = {
 	disabled: true
 };
 
-interface ButtonProps {
+export interface ButtonProps {
 	className?: string;
 	isSubmit?: boolean;
 	isDefault?: boolean;
@@ -41,8 +41,8 @@ export default class Button extends React.PureComponent<ButtonProps> {
 
 		const type: ValidButtonTypes = isSubmit ? 'submit' : 'button';
 		const buttonClasses = [isDefault ? styles.default : styles.button];
-		if (this.props.className) {
-			buttonClasses.push(this.props.className);
+		if (className) {
+			buttonClasses.push(className);
 		}
 
 		const buttonProps = {
