@@ -31,7 +31,7 @@ export function arraysEqual<T> (a: T[], b: T[], entryValidator: BinaryPredicate<
 	return a.every((aField, index) => entryValidator(aField, b[index]));
 };
 
-export function maskObject<T>(object: T, mask: Partial<T>): Partial<T> {
+export function maskObject<T>(object: T, mask: {[key:string]: boolean}): Partial<T> {
 	const maskKeys: (keyof T)[] = Object.keys(mask) as (keyof T)[];
 	return maskKeys.reduce((acc: Partial<T>, key: keyof T): Partial<T> => {
 		if (key in object)

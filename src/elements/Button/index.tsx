@@ -19,13 +19,14 @@ interface ButtonProps {
 	isDefault?: boolean;
 	disabled?: boolean;
 	name?: string;
-	onClick?: MouseEventHandler<HTMLButtonElement>;
+	onClick?: React.MouseEventHandler<HTMLButtonElement>;
 	style?: React.CSSProperties;
 	title?: string;
 	value?: string;
 	content?: React.ReactNode;
 }
 
+type ValidButtonTypes = 'submit' | 'button';
 export default class Button extends React.PureComponent<ButtonProps> {
 
 	render() {
@@ -38,10 +39,10 @@ export default class Button extends React.PureComponent<ButtonProps> {
 			children = <>{content}</>
 		} = this.props;
 
-		const type = isSubmit ? 'submit' : 'button';
+		const type: ValidButtonTypes = isSubmit ? 'submit' : 'button';
 		const buttonClasses = [isDefault ? styles.default : styles.button];
 		if (this.props.className) {
-			buttonClasses.push(this.push);
+			buttonClasses.push(this.props.className);
 		}
 
 		const buttonProps = {

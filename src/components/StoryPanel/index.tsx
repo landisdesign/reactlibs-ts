@@ -6,17 +6,6 @@ import { ReduxState } from '../../reducers/';
 import { setShowEMail } from '../../reducers/ui/actions';
 
 /**
- *	Presents the story when created, along with a button open the demo e-mail dialog.
- *
-function StoryPanel() {
-
-	function openDialog() {
-		dispatch(setShowEMail(true, true));
-	}
-
-	const dispatch = useDispatch();
-	const story = useSelector(({ui: {output}}) => output);
-
 	const button = [
 		{
 			content: 'E-mail to a friend',
@@ -24,12 +13,6 @@ function StoryPanel() {
 			onClick: openDialog
 		}
 	];
-
-	return story ? (
-		<FormLayout scrolling={true} buttons={button}>
-			<Text type='story' html={story}/>
-		</FormLayout>
-	) : null;
 }
 */
 
@@ -46,6 +29,10 @@ type ReduxProps = ConnectedProps<typeof connector>;
 class StoryPanel extends React.PureComponent<ReduxProps> {
 
 	button: string = 'button';
+
+	openDialog() {
+		this.props.showEMailModal();
+	}
 
 	render() {
 		return /*this.props.story ?*/ (<>
