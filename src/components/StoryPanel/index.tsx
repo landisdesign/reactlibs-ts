@@ -5,16 +5,9 @@ import { connect, ConnectedProps } from 'react-redux';
 import { ReduxState } from '../../reducers/';
 import { setShowEMail } from '../../reducers/ui/actions';
 
-/**
-	const button = [
-		{
-			content: 'E-mail to a friend',
-			disabled: !story,
-			onClick: openDialog
-		}
-	];
-}
-*/
+import { ButtonProps } from '../../elements/Button';
+import Text from '../../elements/Text';
+import FormLayout from '../../layouts/FormLayout';
 
 const mapState = ({ui}: ReduxState) => ({
 	story: ui.output
@@ -28,18 +21,29 @@ type ReduxProps = ConnectedProps<typeof connector>;
 
 class StoryPanel extends React.PureComponent<ReduxProps> {
 
-	button: string = 'button';
+	private buttons: ButtonProps[];
 
-	openDialog() {
+	constructor(props: ReduxProps) {
+		super(props);
+		this.openDialog = this.openDialog.bind(this);
+		this.buttons = [
+			{
+				content: 'E-mail to a friend',
+				onClick: this.openDialog
+			}
+		];
+	}
+
+	private openDialog() {
 		this.props.showEMailModal();
 	}
 
 	render() {
-		return /*this.props.story ?*/ (<>
-			FormLayout scrolling={true} buttons={this.button}
-				Text type='story' html={this.props.story}/
-			/FormLayout
-		</>) //: null;
+		return /*this.props.story ?*/ (
+			<FormLayout scrolling={true} buttons={this.buttons}>
+				<Text type='story' html={this.props.story}/>
+			</FormLayout>
+		) //: null;
 	}
 }
 
