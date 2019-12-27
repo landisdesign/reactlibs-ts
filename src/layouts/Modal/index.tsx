@@ -29,9 +29,9 @@ const buildClassNames = (classNames: string[]): string => classNames.map(classNa
 
 export default class Modal extends React.PureComponent<ModalProps> {
 
-	contentDiv: React.RefObject<HTMLDivElement>;
-	modalDiv: React.RefObject<HTMLDivElement>;
-	closed: boolean;
+	private contentDiv: React.RefObject<HTMLDivElement>;
+	private modalDiv: React.RefObject<HTMLDivElement>;
+	private closed: boolean;
 
 	constructor(props: ModalProps) {
 		super(props);

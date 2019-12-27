@@ -15,7 +15,7 @@ interface ProgressIndicatorProps {
  */
 export default class ProgressIndicator extends React.PureComponent<ProgressIndicatorProps> {
 
-	buildBackground(fraction: number, backgroundColor: string, fillColor: string): string {
+	private buildBackground(fraction: number, backgroundColor: string, fillColor: string): string {
 		if (fraction < .2) {
 			return backgroundColor;
 		}

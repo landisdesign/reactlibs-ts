@@ -23,7 +23,7 @@ export default class ApplicationView extends React.Component<ApplicationProps> {
 		this.onChange = this.onChange.bind(this);
 	}
 
-	onChange(selectedOption: ValueType<MenuData>) {
+	private onChange(selectedOption: ValueType<MenuData>) {
 		if (selectedOption) {
 			const { value } = selectedOption as MenuData;
 			const {
