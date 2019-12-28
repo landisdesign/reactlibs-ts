@@ -2,6 +2,7 @@ import React from 'react';
 
 import { ReduxProps } from './index';
 
+import WordRow from '../WordRow';
 import { ButtonProps } from '../../elements/Button';
 import Text from '../../elements/Text';
 import FormLayout from '../../layouts/FormLayout';
@@ -79,8 +80,8 @@ export default class WordsPanelView extends React.Component<ReduxProps> {
 		this.defaultButton.disabled = !isComplete;
 
 		return entries.length ? (
-			<FormLayout scrolling={true} defaultButton={this.defaultButton} buttons={this.buttons}>
-				{ entries.map((_, i) => <>WordField storyIndex={storyIndex} entryIndex={i}/</>) }
+			<FormLayout scrolling={false} defaultButton={this.defaultButton} buttons={this.buttons}>
+				{ entries.map((_, i) => <WordRow key={i} storyIndex={storyIndex} entryIndex={i}/>) }
 			</FormLayout>
 		) : (
 			<Text>

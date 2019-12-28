@@ -17,11 +17,13 @@ class WordListConfig implements WordListConfigData, Cloneable<WordListConfigData
 	readonly id: string;
 	readonly title: string;
 	readonly words: string[];
+	readonly help: string;
 
-	constructor({id, title, words}: WordListConfigData) {
+	constructor({id, title, words, help = ''}: WordListConfigData) {
 		this.id = id;
 		this.title = title;
 		this.words = [...words];
+		this.help = help;
 	}
 
 	clone() {
@@ -34,11 +36,13 @@ class WordRefConfig implements WordRefConfigData, Cloneable<WordRefConfigData> {
 	readonly id: string;
 	readonly title: string;
 	readonly ref: string;
+	readonly help: string;
 
-	constructor({id, title, ref}: WordRefConfigData) {
+	constructor({id, title, ref, help = ''}: WordRefConfigData) {
 		this.id = id;
 		this.title = title;
 		this.ref = ref;
+		this.help = help;
 	}
 
 	clone() {

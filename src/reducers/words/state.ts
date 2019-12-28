@@ -4,11 +4,13 @@ export class Word implements WordListConfigData {
 	readonly id: string;
 	readonly title: string;
 	readonly words: string[];
+	readonly help: string;
 
-	constructor({id, title, words}: {id: string, title: string, words: string[]}) {
+	constructor({id, title, words, help}: WordListConfigData) {
 		this.id = id;
 		this.title = title;
 		this.words = [...words];
+		this.help = help;
 	}
 }
 
@@ -48,6 +50,7 @@ export class WordState {
 			const listConfig: WordListConfigData = {
 				id: refConfig.id,
 				title: refConfig.title,
+				help: refConfig.help,
 				words
 			};
 			wordMap[listConfig.id] = new Word(listConfig);

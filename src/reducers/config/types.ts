@@ -8,6 +8,7 @@
 interface WordBaseConfigData {
 	readonly id: string;
 	readonly title: string;
+	readonly help: string;
 }
 
 export interface WordListConfigData extends WordBaseConfigData {
