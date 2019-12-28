@@ -1,6 +1,6 @@
 import React from 'react';
 
-//import Tooltip from '../../elements/Tooltip';
+import Tooltip from '../../elements/Tooltip';
 import Button from '../../elements/Button'
 
 import Info from '../../svg/Info';
@@ -14,10 +14,13 @@ type WordRowViewProps = ReceivedProps & ReduxProps;
 
 export default class WordRowView extends React.Component<WordRowViewProps> {
 
+	private tooltipFixed: boolean = false;
+
 	constructor(props: WordRowViewProps) {
 		super(props);
 		this.onChange = this.onChange.bind(this);
 		this.randomize = this.randomize.bind(this);
+		this.fixTooltipWidth = this.fixTooltipWidth.bind(this);
 	}
 
 	private changeWord(value: string) {
@@ -40,6 +43,15 @@ export default class WordRowView extends React.Component<WordRowViewProps> {
 		this.changeWord(words[Math.floor(Math.random() * words.length)]);
 	}
 
+	private fixTooltipWidth({top, left}: {top: number, left: number}, currentEvent: any, currentTarget: any) {
+		if (this.tooltipFixed) return {top, left};
+
+		currentTarget.style.maxWidth = '50%';
+		this.tooltipFixed = true;
+
+		return { top, left };
+	}
+
 	render() {
 
 		const {
@@ -56,7 +68,7 @@ export default class WordRowView extends React.Component<WordRowViewProps> {
 			<div className={styles.wordRow}>
 				<div className={styles.labelRow}>
 					<label className={styles.label} htmlFor={fieldName}>{title}</label>
-					{ help && <>Tooltip id={tooltipId} content={help}><Info className={styles.tooltip}/>/Tooltip></>}
+					{ help && <Tooltip id={tooltipId} content={help} overridePosition={this.fixTooltipWidth}><Info className={styles.tooltip}/></Tooltip>}
 				</div>
 				<div>
 					<input type='text' className={styles.input} name={fieldName} id={fieldName} value={value} onChange={this.onChange}/>
