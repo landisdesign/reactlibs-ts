@@ -11,6 +11,7 @@ import Copyright from '../../elements/Copyright';
 import Title from '../../elements/Title';
 
 import StoryPanel from '../StoryPanel';
+import WordsPanel from '../WordsPanel';
 
 import styles from './Application.module.scss';
 
@@ -123,7 +124,7 @@ export default class ApplicationView extends React.Component<ApplicationProps> {
 				<Title>{title}</Title>
 				MasterDetailLayout masterLabel='Words' detailLabel='Story' highlightDetail={showStory} highlightDetailCallback=showDetail
 					MasterPanel highlightDetail={showStory}
-						WordsPanel/
+						<WordsPanel/>
 					/MasterPanel
 					DetailPanel highlightDetail={showStory}
 						<StoryPanel/>
