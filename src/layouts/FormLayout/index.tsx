@@ -36,7 +36,7 @@ export default class FormLayout extends React.Component<FormLayoutProps> {
 
 		const buttonPanel = allButtons.length ? (
 			<div className={styles.buttons}>
-				{ buttons.map((button, index) => <span key={'button-' + index}><Button {...button}/></span>) }
+				{ allButtons.map((button, index) => <span key={'button-' + index}><Button {...button}/></span>) }
 			</div>
 		) : null;
 
