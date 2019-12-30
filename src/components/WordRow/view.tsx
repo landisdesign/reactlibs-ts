@@ -24,14 +24,7 @@ export default class WordRowView extends React.Component<WordRowViewProps> {
 	}
 
 	private changeWord(value: string) {
-		const {
-			storyIndex,
-			entryIndex,
-
-			setEntry
-		} = this.props;
-
-		setEntry(storyIndex, entryIndex, value);
+		this.props.setEntry(this.props.storyIndex, this.props.entryIndex, value);
 	}
 
 	private onChange(e: React.ChangeEvent<HTMLInputElement>) {

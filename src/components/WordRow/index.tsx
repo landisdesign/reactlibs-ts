@@ -1,4 +1,3 @@
-import { Dispatch } from 'redux';
 import { connect, ConnectedProps } from 'react-redux';
 
 import { ReduxState } from '../../reducers/';
@@ -10,16 +9,15 @@ import WordRowView from './view';
 export type ReduxProps = ConnectedProps<typeof connector>;
 
 export interface ReceivedProps {
-	storyIndex: number;
 	entryIndex: number;
 }
 
 const mapState = (state: ReduxState, props: ReceivedProps) => {
 	const {
-		storyIndex,
 		entryIndex
 	} = props;
 
+	const storyIndex = state.ui.storyIndex;
 	const value = state.entries[storyIndex][entryIndex];
 	const wordType = state.stories.at(storyIndex).fields[entryIndex];
 	const {
@@ -29,6 +27,7 @@ const mapState = (state: ReduxState, props: ReceivedProps) => {
 	} = state.words.find(wordType);
 
 	return {
+		storyIndex,
 		help,
 		title,
 		value,
@@ -36,9 +35,9 @@ const mapState = (state: ReduxState, props: ReceivedProps) => {
 	};
 };
 
-const mapDispatch = (dispatch: Dispatch) => ({
-	setEntry: (storyIndex: number, entryIndex: number, value: string) => dispatch(setEntry(storyIndex, entryIndex, value))
-});
+const mapDispatch = {
+	setEntry
+};
 
 const connector = connect(mapState, mapDispatch);
 
