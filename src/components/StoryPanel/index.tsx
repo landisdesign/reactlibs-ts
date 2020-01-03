@@ -39,11 +39,11 @@ class StoryPanel extends React.PureComponent<ReduxProps> {
 	}
 
 	render() {
-		return /*this.props.story ?*/ (
+		return this.props.story ? (
 			<FormLayout scrolling={true} buttons={this.buttons}>
 				<Text type='story' html={this.props.story}/>
 			</FormLayout>
-		) //: null;
+		) : null;
 	}
 }
 
