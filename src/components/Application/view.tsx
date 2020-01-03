@@ -10,6 +10,8 @@ import { ReduxProps, ReceivedProps, MenuData } from './index';
 import Copyright from '../../elements/Copyright';
 import Title from '../../elements/Title';
 
+import MasterDetailLayout from '../../layouts/MasterDetailLayout';
+
 import StoryPanel from '../StoryPanel';
 import WordsPanel from '../WordsPanel';
 
@@ -122,14 +124,7 @@ export default class ApplicationView extends React.Component<ApplicationProps> {
 				<Title packed={true}>MadLibs, React style</Title>
 				<Select className={styles.selector} options={options} value={options[index]} onChange={this.onChange} isSearchable={false} />
 				<Title>{title}</Title>
-				MasterDetailLayout masterLabel='Words' detailLabel='Story' highlightDetail={showStory} highlightDetailCallback=showDetail
-					MasterPanel highlightDetail={showStory}
-						<WordsPanel/>
-					/MasterPanel
-					DetailPanel highlightDetail={showStory}
-						<StoryPanel/>
-					/DetailPanel
-				/MasterDetailLayout
+				<MasterDetailLayout masterLabel='Words' masterContent={<WordsPanel/>} detailLabel='Story' detailContent={<StoryPanel/>} currentPanel={showStory ? 'detail' : 'master'} />
 				<Copyright/>
 			</div>
 			EmailModal/

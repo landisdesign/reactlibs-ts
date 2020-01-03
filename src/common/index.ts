@@ -21,6 +21,8 @@ interface VoidFunction {
 	(): void;
 }
 
+export const buildClasses = (styles: any) => (classNames: string[]) => classNames.map(x => styles[x]).join(' ');
+
 export function arraysEqual<T> (a: T[], b: T[], entryValidator: BinaryPredicate<T> = ((aField, bField) => aField === bField)): boolean {
 	if (a === null || b === null) {
 		return a === b;
@@ -40,7 +42,7 @@ export function maskObject<T>(object: T, mask: {[key:string]: boolean}): Partial
 	}, {} as Partial<T>);
 }
 
-export const noop = ():void =>{};
+export const noop = ():void => {};
 
 export function objectsEqual<T>(a: T, b: T) {
 	if (a === null || b === null) {
