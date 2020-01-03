@@ -4,8 +4,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { ReduxState } from '../../reducers';
 import { setShowEMail } from '../../reducers/ui/actions';
 
-import Modal from '../../layouts/Modal';
-import { ModalCloseEvent, ModalTransitionEvent } from '../../layouts/Modal/events';
+import Modal, { ModalCloseEvent, ModalTransitionEvent } from '../../layouts/Modal';
 
 import Text from '../../elements/Text';
 

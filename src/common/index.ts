@@ -90,8 +90,7 @@ export function childrenChanged(priorChildrenNodes: React.ReactNode = null, next
 export const sleep = (ms: number): Promise<void> => new Promise<void>( (resolve: VoidFunction) => setTimeout(resolve, ms));
 
 
-export type BaseEventType = React.BaseSyntheticEvent<null, HTMLElement | null, HTMLElement | null>
-
+type BaseEventType = React.BaseSyntheticEvent<null, HTMLElement | null, HTMLElement | null>
 
 export abstract class BaseEvent implements BaseEventType {
 	readonly bubbles: boolean = false;

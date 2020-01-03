@@ -6,7 +6,26 @@ import styles from './Modal.module.scss';
 
 import Close from '../../svg/Close';
 
-import { ModalCloseEvent, ModalTransitionEvent } from './events';
+import { BaseEvent } from '../../common';
+
+export const MODAL_CLOSE_EVENT_TYPE: string = 'modalClose';
+
+export class ModalCloseEvent extends BaseEvent {
+	constructor(target: HTMLElement | null, trusted: boolean) {
+		super(MODAL_CLOSE_EVENT_TYPE, true, target, trusted);
+	}
+}
+
+export const TRANSITION_EVENT_TYPE: string = 'modalTransition';
+
+export class ModalTransitionEvent extends BaseEvent {
+	readonly opening: boolean;
+
+	constructor(target: HTMLElement | null, trusted: boolean, opening: boolean) {
+		super(TRANSITION_EVENT_TYPE, false, target, trusted);
+		this.opening = opening;
+	}
+}
 
 export interface ModalTransitionEventListener {
 	(e: ModalTransitionEvent): void;
