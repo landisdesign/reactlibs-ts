@@ -1,0 +1,95 @@
+@import '../../common/_variables';
+
+.container {
+	height: 100%;
+}
+
+.panelHolder {
+	border: 1px solid $color-accent-dark;
+}
+
+@media #{$media-not-phone} {
+	.tabHolder {
+		display: none;
+	}
+
+	.panelHolder {
+		display: grid;
+		grid: "master detail" / minmax(min-content, 35%) 1fr;
+		column-gap: .5rem;
+		box-sizing: border-box;
+		height: 100%;
+		padding: .5rem;
+	}
+
+	.panel:first-child {
+		grid-area: master;
+		height: 100%;
+		border-right: 1px solid $color-accent-light;
+	}
+
+	.panel:last-child {
+		grid-area: detail;
+		height: 100%;
+	}
+}
+
+@media #{$media-phone} {
+
+	.container {
+		display: grid;
+		grid: "tabs"
+		      "panels" 1fr;
+	}
+
+	.tabHolder {
+		grid-area: tabs;
+		display: block;
+		z-index: 1;
+		margin: 0 0 -1px;
+	}
+
+	.tabs {
+		display: flex;
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+
+	.tab {
+		padding: .5rem 2rem;
+		border: 1px solid $color-accent-dark;
+		border-radius: .5rem .5rem 0 0;
+		margin-right: .25rem;
+		font: $font-weight-bold map-get($font-size-normal, "phone") $font-sans-serif;
+		cursor: pointer;
+		background-color: $color-accent-pale;
+
+		&.current {
+			border-bottom-color: $color-canvas;
+			background-color: $color-canvas;
+		}
+	}
+
+	.panelHolder {
+		grid-area: panels;
+		position: relative;
+		box-sizing: border-box;
+		padding: .5rem 0 .5rem .5rem;
+	}
+
+	.panel {
+		position: absolute;
+		visibility: hidden;
+		top: 0;
+		right: 0;
+		left: 0;
+		box-sizing: border-box;
+		padding: .5rem 0 .5rem .5rem;
+		height: 100%;
+
+		&.current {
+			visibility: visible;
+		}
+	}
+}
