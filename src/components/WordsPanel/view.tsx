@@ -79,7 +79,7 @@ export default class WordsPanelView extends React.Component<ReduxProps> {
 		this.defaultButton.disabled = !isComplete;
 
 		return entries.length ? (
-			<FormLayout scrolling={false} defaultButton={this.defaultButton} buttons={this.buttons}>
+			<FormLayout scrolling={true} defaultButton={this.defaultButton} buttons={this.buttons}>
 				{ entries.map((_, i) => <WordRow key={i} entryIndex={i}/>) }
 			</FormLayout>
 		) : (
