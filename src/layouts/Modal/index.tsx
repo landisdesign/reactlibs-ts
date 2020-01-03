@@ -22,7 +22,6 @@ interface ModalProps {
 	onBeforeClose?: ModalCloseEventListener;
 	title?: string
 	background?: React.CSSProperties;
-	children?: React.ReactNode;
 };
 
 const buildClassNames = (classNames: string[]): string => classNames.map(className => styles[className]).join(' ');
