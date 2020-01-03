@@ -1,14 +1,12 @@
 import { BaseEventType, BaseEvent } from '../../common';
 
-type ModalCloseEventType = BaseEventType;
-
 interface ModalTransitionEventType extends BaseEventType {
 	opening: boolean;
 }
 
 export const MODAL_CLOSE_EVENT_TYPE: string = 'modalClose';
 
-export class ModalCloseEvent extends BaseEvent implements ModalCloseEventType {
+export class ModalCloseEvent extends BaseEvent {
 	constructor(target: HTMLElement | null, trusted: boolean) {
 		super(MODAL_CLOSE_EVENT_TYPE, true, target, trusted);
 	}
