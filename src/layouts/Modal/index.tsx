@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { sleep } from '../../common';
+import { buildClasses, sleep } from '../../common';
 
 import styles from './Modal.module.scss';
 
@@ -49,7 +49,7 @@ interface ModalState {
 	wasClosed: boolean;
 }
 
-const buildClassNames = (classNames: string[]): string => classNames.map(className => styles[className]).join(' ');
+const buildClassNames = buildClasses(styles);
 
 export default class Modal extends React.PureComponent<ModalProps, ModalState> {
 
