@@ -12,6 +12,7 @@ import Title from '../../elements/Title';
 
 import MasterDetailLayout from '../../layouts/MasterDetailLayout';
 
+import EMailModal from '../EMailModal';
 import StoryPanel from '../StoryPanel';
 import WordsPanel from '../WordsPanel';
 
@@ -127,7 +128,7 @@ export default class ApplicationView extends React.Component<ApplicationProps> {
 				<MasterDetailLayout masterLabel='Words' masterContent={<WordsPanel/>} detailLabel='Story' detailContent={<StoryPanel/>} currentPanel={showStory ? 'detail' : 'master'} />
 				<Copyright/>
 			</div>
-			EmailModal/
+			<EMailModal/>
 		</>;
 	}
 }
