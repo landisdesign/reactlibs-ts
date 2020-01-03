@@ -8,6 +8,7 @@ import logger from 'redux-logger';
 
 import './index.css';
 import App from './App';
+import { BASE_URL } from './common';
 import { reducer } from './reducers';
 
 import * as serviceWorker from './serviceWorker';
@@ -16,7 +17,7 @@ const store = createStore(reducer, applyMiddleware(thunk, logger) );
 
 ReactDOM.render((
 	<Provider store={store}>
-		<Router basename='/development/madlibs-ts'>
+		<Router basename={BASE_URL}>
 			<App />
 		</Router>
 	</Provider>
