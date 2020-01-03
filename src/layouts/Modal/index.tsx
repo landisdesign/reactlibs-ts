@@ -4,6 +4,8 @@ import { sleep } from '../../common';
 
 import styles from './Modal.module.scss';
 
+import Close from '../../svg/Close';
+
 import { ModalCloseEvent, ModalTransitionEvent } from './events';
 
 export interface ModalTransitionEventListener {
@@ -24,19 +26,24 @@ interface ModalProps {
 	background?: React.CSSProperties;
 };
 
+interface ModalState {
+	wasClosed: boolean;
+}
+
 const buildClassNames = (classNames: string[]): string => classNames.map(className => styles[className]).join(' ');
 
-export default class Modal extends React.PureComponent<ModalProps> {
+export default class Modal extends React.PureComponent<ModalProps, ModalState> {
 
 	private contentDiv: React.RefObject<HTMLDivElement>;
 	private modalDiv: React.RefObject<HTMLDivElement>;
-	private closed: boolean;
 
 	constructor(props: ModalProps) {
 		super(props);
+		this.state = {
+			wasClosed: true
+		};
 		this.contentDiv = React.createRef();
 		this.modalDiv = React.createRef();
-		this.closed = false;
 		this.closeKeyEventListener = this.closeKeyEventListener.bind(this);
 		this.closeMouseEventListener = this.closeMouseEventListener.bind(this);
 	}
@@ -66,7 +73,7 @@ export default class Modal extends React.PureComponent<ModalProps> {
 
 		if (onTransition) {
 			await sleep(transitionToOpen ? 650 : 350);
-			const transitionEvent = new ModalTransitionEvent(modalDiv, true, isOpen);
+			const transitionEvent = new ModalTransitionEvent(modalDiv, true, transitionToOpen);
 			onTransition(transitionEvent);
 		}
 	}
@@ -87,7 +94,7 @@ export default class Modal extends React.PureComponent<ModalProps> {
 			return;
 		}
 
-		if (!this.props.isOpen || this.closed) {
+		if (!this.props.isOpen || this.state.wasClosed) {
 			return;
 		}
 		if (this.props.onBeforeClose) {
@@ -104,7 +111,14 @@ export default class Modal extends React.PureComponent<ModalProps> {
 		else {
 			modalDiv.className = styles.modal;
 		}
-		this.closed = true;
+		this.setState({
+			wasClosed: true
+		});
+	}
+
+	static getDerivedStateFromProps(props: ModalProps, state: ModalState) {
+		// Closed is only used to handle closing the modal internally.
+		state.wasClosed = false;
 	}
 
 	componentDidMount() {
@@ -145,7 +159,7 @@ export default class Modal extends React.PureComponent<ModalProps> {
 		return (title || showCloseButton)
 			?	<h1 className={styles.modalHeader}>
 					<span>{title}</span>
-					{showCloseButton ? <span className={styles.close} onClick={this.closeMouseEventListener}>Close actionable={true}/</span> : null }
+					{showCloseButton ? <span className={styles.close} onClick={this.closeMouseEventListener}><Close actionable={true}/></span> : null }
 				</h1>
 			: null
 		;

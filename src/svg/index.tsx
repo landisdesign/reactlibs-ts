@@ -28,6 +28,7 @@ export function injectSVGProps<P extends SVGProps>(SvgComponent: React.Component
 			const svgProps = {
 				...this.props,
 				viewBox,
+				actionable: '' + actionable,
 				className: classes.join(' ')
 			};
 
