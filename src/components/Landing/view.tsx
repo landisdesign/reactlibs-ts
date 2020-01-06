@@ -3,7 +3,7 @@ import { Redirect } from 'react-router-dom';
 
 import { ReceivedProps, ReduxProps } from './index';
 
-import { APP_PREFIX, CONFIG_URL, SPLASH_SCREEN_DURATION } from '../../common';
+import { APP_PREFIX, CONFIG_URL, BASE_URL, SPLASH_SCREEN_DURATION } from '../../common';
 
 import Copyright from '../../elements/Copyright';
 import Image from '../../elements/Image';
@@ -64,7 +64,7 @@ export default class LandingView extends React.Component<LandingProps> {
 			<Redirect to={APP_PREFIX}/>
 		) : (
 			<Modal isOpen={landingVisible} isTransitioning={isTransitioning} onTransition={transitionListener} onBeforeClose={e => e.preventDefault()} background={{backgroundColor: '#FFF'}} showCloseButton={false}>
-				<Image src='/development/madlibs/logo.png' align='center'/>
+				<Image src={BASE_URL + '/logo.png'} align='center'/>
 				<Title>MadLibs, React style</Title>
 				<ProgressIndicator current={current} max={total} width='80%' backgroundColor='#DEF'/>
 				<Copyright/>
