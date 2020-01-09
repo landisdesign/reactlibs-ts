@@ -54,6 +54,15 @@ interfaces, and leaving it at that. I'm not sure if one is more of an
 anti-pattern than the other, but I'd follow the conventions of the code base
 I'm working on.
 
+**UPDATE:** As I finished up all the active implementations underneath the
+state classes, I came to realize this was horribly over-engineered. The minute
+I considered how state would be hydrated from local storage or from incoming
+JSON, I realized how convoluted the class code would need to be, when simply
+doing modifications and updates to the literals under the interfaces would be
+adequate. I'm changing this in my next version,
+[`reactlibs-tdd`](https://github.com/landisdesign/reactlibs-tdd), to be
+interface-driven instead of class-driven.
+
 ## First Impressions: Classes vs Functional Components
 
 I converted all of my components to classes. This is obviously extreme, but I
