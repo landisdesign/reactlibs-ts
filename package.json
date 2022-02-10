@@ -16,7 +16,7 @@
     "@types/react-select": "^3.0.8",
     "@types/react-tooltip": "^3.11.0",
     "@types/redux-logger": "^3.0.7",
-    "node-sass": "^4.13.0",
+    "node-sass": "^7.0.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-redux": "^7.1.3",
